@@ -21,5 +21,16 @@ pipeline {
                 
             }
     }
+    post { 
+        always { 
+            echo 'I will always run this session'
+        }
+        success{
+             echo 'I will  run only pipeline success'
+        }
+        failure{
+             echo 'I will  run only pipeline fails'
+        }
+
     }
 }
