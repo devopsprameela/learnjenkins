@@ -2,17 +2,39 @@ pipeline {
     agent {
         label 'Agent-1'
     }
-     parameters {
-        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
 
-        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+    parameters {
+        string(
+            name: 'PERSON',
+            defaultValue: 'Mr Jenkins',
+            description: 'Who should I say hello to?'
+        )
 
-        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+        text(
+            name: 'BIOGRAPHY',
+            defaultValue: '',
+            description: 'Enter some information about the person'
+        )
 
-        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+        booleanParam(
+            name: 'TOGGLE',
+            defaultValue: true,
+            description: 'Toggle this value'
+        )
 
-        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+        choice(
+            name: 'CHOICE',
+            choices: ['One', 'Two', 'Three'],
+            description: 'Pick something'
+        )
+
+        password(
+            name: 'PASSWORD',
+            defaultValue: 'SECRET',
+            description: 'Enter a password'
+        )
     }
+
     stages {
 
         stage('Build') {
@@ -20,43 +42,52 @@ pipeline {
                 sh 'echo it is build stage'
             }
         }
-        stage('approval') {
+
+        stage('Approval') {
             input {
                 message "Should we continue?"
                 ok "Yes, we should."
                 submitter "alice,bob"
+
                 parameters {
-                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                }
-            steps {
-                    echo "Hello , ${PERSON}, nice to meet you"
+                    string(
+                        name: 'APPROVER_NAME',
+                        defaultValue: 'Mr Jenkins',
+                        description: 'Who approved the pipeline?'
+                    )
                 }
             }
-    }
+
+            steps {
+                echo "Approval received"
+            }
+        }
+
         stage('Test') {
             steps {
                 sh 'echo this is test stage'
             }
         }
-     
+
         stage('Deploy') {
             steps {
                 sh 'echo this is deploy stage'
             }
         }
-        stage('print parameters') {
+
+        stage('Print Parameters') {
             steps {
                 echo "Hello ${params.PERSON}"
                 echo "Biography: ${params.BIOGRAPHY}"
-                echo "Hello ${params.TOGGLE}"
-                echo "my choice is: ${params.CHOICE}"
-                echo "passord is:${params.PASSWORD} "
+                echo "Toggle value: ${params.TOGGLE}"
+                echo "My choice is: ${params.CHOICE}"
+                echo "Password is: ${params.PASSWORD}"
             }
-
         }
-       
+    }
 
     post {
+
         always {
             echo "I will always run this session"
             deleteDir()
@@ -70,5 +101,4 @@ pipeline {
             echo "I will run only when pipeline fails"
         }
     }
-}
 }
