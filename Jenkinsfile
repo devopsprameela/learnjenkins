@@ -20,7 +20,16 @@ pipeline {
                 sh 'echo it is build stage'
             }
         }
-
+        stage('approval') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                submitter "alice,bob"
+                parameters {
+                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                }
+            }
+    }
         stage('Test') {
             steps {
                 sh 'echo this is test stage'
@@ -42,16 +51,7 @@ pipeline {
             }
 
         }
-        stage('approval') {
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-                submitter "alice,bob"
-                parameters {
-                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                }
-            }
-    }
+       
 
     post {
         always {
