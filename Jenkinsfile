@@ -26,15 +26,15 @@ pipeline {
 
     post {
         always {
-            echo 'I will always run this session'
+            echo "I will always run this session"
         }
 
         success {
-            echo 'I will run only when pipeline succeeds'
+            echo "I will run only when pipeline succeeds"
         }
 
         failure {
-            echo 'I will run only when pipeline fails'
+            echo "I will run only when pipeline fails"
         }
     }
 }
