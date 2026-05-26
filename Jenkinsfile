@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'Agent-1'
-    }
+    agent any
 
     parameters {
         string(
